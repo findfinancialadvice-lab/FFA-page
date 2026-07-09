@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en-NZ">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Find Financial Advice NZ" />
+  <meta name="application-name" content="Find Financial Advice NZ">
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="Find a trusted New Zealand financial adviser. Learn what to look for, how advisers are regulated, and how to get personalised money advice in NZ.">
+  <title>Find a Financial Adviser in NZ | Find Financial Advice NZ</title>
+  <link rel="canonical" href="https://financialadvice.co.nz/advisers">
+  <link rel="stylesheet" href="styles.min.css">
+  <style>
+    .advisers-intro-body { max-width: 780px; }
+    .advisers-intro-body p { font-size: 0.975rem; color: var(--text-mid); line-height: 1.85; margin-bottom: 16px; }
+    .advisers-intro-body p:last-child { margin-bottom: 0; }
+
+    .directory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .directory-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .directory-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .directory-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .directory-card p { font-size: 0.875rem; color: var(--text-mid); line-height: 1.7; flex: 1; margin-bottom: 18px; }
+    .directory-card a.dir-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.875rem; font-weight: 600; color: var(--blue);
+      transition: color 0.15s;
+    }
+    .directory-card a.dir-link:hover { color: #2d74c0; text-decoration: underline; }
+    .directory-card a.dir-link::after { content: "→"; }
+
+    .fspr-callout {
+      background: #eaf3de;
+      border: 1.5px solid #b5d98a;
+      border-radius: var(--radius-lg);
+      padding: 40px 48px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    .fspr-callout-icon {
+      font-size: 3rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .fspr-callout-body h2 { font-size: 1.4rem; font-weight: 800; color: #1e6427; margin-bottom: 10px; }
+    .fspr-callout-body p { font-size: 0.95rem; color: #3b6d11; line-height: 1.75; margin-bottom: 18px; }
+    .fspr-callout-body a.btn { display: inline-flex; }
+
+    @media (max-width: 960px) {
+      .directory-grid { grid-template-columns: repeat(2, 1fr); }
+      .fspr-callout { flex-direction: column; gap: 20px; padding: 28px 24px; }
+    }
+    @media (max-width: 600px) {
+      .directory-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PXX6WRRG');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- FAQ Schema for AEO -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EKNTL9Q19B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EKNTL9Q19B');
+  </script>
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="Find Financial Advice NZ">
+  <meta property="og:url"         content="https://financialadvice.co.nz/advisers">
+  <meta property="og:title"       content="Find a Financial Adviser in NZ">
+  <meta property="og:description" content="Find a licensed financial adviser in New Zealand. Browse FMA-registered advisers by region and speciality, with guides on what to ask and what to pay.">
+  <meta property="og:image"       content="https://i.postimg.cc/XvXzCPs9/FFA-og-image.jpg">
+  <meta property="og:image:type"  content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="Find a Financial Adviser in NZ">
+  <meta name="twitter:description" content="Find a licensed financial adviser in New Zealand. Browse FMA-registered advisers by region and speciality, with guides on what to ask and what to pay.">
+  <meta name="twitter:image"      content="https://i.postimg.cc/XvXzCPs9/FFA-og-image.jpg">
+  <meta property="og:locale"      content="en_NZ">
+  <meta name="geo.region"         content="NZ">
+  <meta name="language"           content="en-NZ">
+  <meta name="robots"             content="index, follow">
+  <meta name="theme-color"        content="#0d4a35">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://financialadvice.co.nz/advisers#webpage",
+      "url": "https://financialadvice.co.nz/advisers",
+      "name": "Find a Financial Adviser in NZ",
+      "description": "Find a trusted New Zealand financial adviser. Learn what to look for, how advisers are regulated, and how to get personalised money advice in NZ.",
+      "isPartOf": { "@id": "https://financialadvice.co.nz/#website" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://financialadvice.co.nz/advisers#faq",
+      "mainEntity": [
+        { "@type": "Question", "name": "How do I find a financial adviser in New Zealand?", "acceptedAnswer": { "@type": "Answer", "text": "You can find a licensed financial adviser in New Zealand through the Financial Advice NZ adviser search tool at financialadvice.nz, the Financial 1000 directory, or Finance Advisers NZ. Before engaging any adviser, verify their credentials on the Financial Service Providers Register (FSPR) at fsp-register.companiesoffice.govt.nz — all legitimate advisers must hold a current Financial Advice Provider (FAP) licence." } },
+        { "@type": "Question", "name": "Are financial advisers regulated in New Zealand?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All financial advisers in New Zealand are regulated by the Financial Markets Authority (FMA) and must be registered on the Financial Service Providers Register (FSPR). Before engaging any adviser, you can verify their credentials for free on the FSPR. Look for the licence type Financial Advice Provider (FAP) and confirm the adviser is currently licensed." } },
+        { "@type": "Question", "name": "How much does a financial adviser cost in New Zealand?", "acceptedAnswer": { "@type": "Answer", "text": "Financial adviser fees in New Zealand range from around $250 to $4,000 or more depending on the complexity of your situation. Some advisers charge hourly rates, others charge flat fees, and some — particularly KiwiSaver and mortgage advisers — are compensated by product providers rather than clients, making their services free of charge to you. Always ask how an adviser is paid before engaging them." } },
+        { "@type": "Question", "name": "Do I need a financial adviser in New Zealand?", "acceptedAnswer": { "@type": "Answer", "text": "Financial advice is valuable for anyone facing major decisions such as choosing a KiwiSaver fund, buying a home, planning for retirement, or managing debt. Only 28% of New Zealanders accessed financial advice in the past year, despite the significant difference it can make to long-term outcomes. Research shows KiwiSaver members who received advice had approximately 52% more in their accounts on average than those without advice." } },
+        { "@type": "Question", "name": "What is the Financial Service Providers Register in New Zealand?", "acceptedAnswer": { "@type": "Answer", "text": "The Financial Service Providers Register (FSPR) is maintained by the New Zealand Companies Office and lists all licensed financial advisers and advice providers in New Zealand. Before engaging any adviser, you can search their name on the FSPR for free to confirm they hold a current Financial Advice Provider (FAP) licence. If they are not on the register, they are operating illegally and you should not proceed." } }
+      ]
+    }
+  ]
+}
+  </script>
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1661535551726233');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1661535551726233&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PXX6WRRG"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-pill">
+        <img src="Find%20Financial%20Advice%20Logo%2C%20wide%20R.png" alt="FindFinancialAdvice.co.nz" class="nav-logo-img">
+      </div>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">Topics <span class="nav-dropdown-arrow">&#9660;</span></button>
+        <ul class="nav-dropdown-menu">
+          <li><a href="/kiwisaver">KiwiSaver</a></li>
+          <li><a href="/property">Property</a></li>
+          <li><a href="/investing">Investing</a></li>
+          <li><a href="/budgeting">Budgeting</a></li>
+          <li><a href="/retirement">Retirement</a></li>
+          <li><a href="/insurance">Insurance</a></li>
+        </ul>
+      </li>
+            <li><a href="/sources">Sources</a></li>
+      <li><a href="/advisers" class="active">Advisers</a></li>
+      <li><a href="/calculators">Calculators</a></li>
+    </ul>
+    <div class="nav-social">
+      <a href="https://www.facebook.com/FindFinancialAdviceNZ" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/find-financial-advice-nz/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Find a Financial Adviser in NZ</h1>
+    <p>Why professional advice matters — and where to find a qualified adviser near you</p>
+  </div>
+</div>
+
+<!-- Intro -->
+<section class="section" style="padding-bottom: 0;">
+  <div class="container">
+    <div class="advisers-intro-body">
+      <p>Only 28% of New Zealanders accessed financial advice in the past year, despite most people thinking about their finances at least weekly. The barriers are well-documented — cost, not knowing where to start, and uncertainty about whether an adviser is trustworthy. This page is designed to address all three: here is why advice matters, who provides it, and exactly where to find a qualified professional.</p>
+      <p>All financial advisers in New Zealand are regulated by the Financial Markets Authority (FMA) and must be registered on the Financial Service Providers Register (FSPR). Before engaging any adviser, you can verify their credentials for free using the FSPR link at the bottom of this page. Look for the licence type "Financial Advice Provider" (FAP) and confirm the adviser is currently licensed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Why advice matters -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Why — and how — to engage a financial adviser</h2>
+      <p class="section-subtitle">Independent perspectives from NZ journalists and regulators</p>
+    </div>
+    <div class="news-grid">
+
+      <div class="news-card">
+        <h3><a href="https://www.rnz.co.nz/news/business/590594/few-kiwis-accessing-financial-advice-many-unsure-where-to-start" target="_blank" rel="noopener noreferrer">Few Kiwis accessing financial advice, many unsure where to start</a></h3>
+        <p class="news-card-summary">FMA research finds only 28% of New Zealanders accessed financial advice in the past year. Affordability (31%), not knowing where to start (26%), and distrust of advisers (15%) are the top barriers — yet 63% of Kiwis think about their finances at least weekly. The FMA identifies technology-enabled and hybrid advice models as the most promising path to closing the gap.</p>
+        <div class="news-card-meta">
+          <span class="source"><a href="https://www.rnz.co.nz/news/business" target="_blank" rel="noopener noreferrer">RNZ Business</a></span>
+          <span class="sep">&bull;</span><span>25 Mar 2026</span>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <h3><a href="https://www.consumer.org.nz/articles/do-you-need-a-financial-advisor" target="_blank" rel="noopener noreferrer">Do you need a financial adviser?</a></h3>
+        <p class="news-card-summary">Financial advice isn't just for the wealthy — it's valuable for anyone facing major decisions such as buying a home, choosing a KiwiSaver fund, planning for retirement, or managing debt. Consumer NZ explains what to look for in a quality adviser, how to verify their FMA licence, and the questions you should ask before signing anything.</p>
+        <div class="news-card-meta">
+          <span class="source"><a href="https://www.consumer.org.nz" target="_blank" rel="noopener noreferrer">Consumer NZ</a></span>
+          <span class="sep">&bull;</span><span>2026</span>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <h3><a href="https://thespinoff.co.nz/money/12-08-2020/everything-youve-always-wanted-to-know-about-financial-advisers" target="_blank" rel="noopener noreferrer">Everything you've always wanted to know about financial advisers</a></h3>
+        <p class="news-card-summary">A comprehensive plain-English guide covering what financial advisers do, when you might need one, and what they cost — ranging from $250 to $4,000 or more depending on the complexity of your situation. Also covers how advisers are paid (fees or commissions), and outlines free alternatives for those seeking simpler guidance.</p>
+        <div class="news-card-meta">
+          <span class="source"><a href="https://thespinoff.co.nz" target="_blank" rel="noopener noreferrer">The Spinoff</a></span>
+          <span class="sep">&bull;</span><span>12 Aug 2020</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Directories -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Adviser directories</h2>
+      <p class="section-subtitle">These directories can help you find a qualified financial adviser in your area</p>
+    </div>
+    <div class="directory-grid">
+
+      <div class="directory-card">
+        <h3>Financial Advice NZ</h3>
+        <p>The official adviser search tool run by Financial Advice New Zealand (FANZ), the professional body for financial advisers. Search by location, speciality, and adviser name. All advisers listed are FANZ members and FMA-registered.</p>
+        <a href="https://financialadvice.nz/FANZ/FANZ/FindAdvisor/SearchBuddy.aspx" target="_blank" rel="noopener noreferrer" class="dir-link">Search advisers</a>
+      </div>
+
+      <div class="directory-card">
+        <h3>Financial 1000</h3>
+        <p>A directory of New Zealand financial professionals, including advisers, planners, and mortgage brokers. Browse by region or adviser type to find professionals near you.</p>
+        <a href="https://www.financial1000.com/NZ/Christchurch/169216" target="_blank" rel="noopener noreferrer" class="dir-link">Browse directory</a>
+      </div>
+
+      <div class="directory-card">
+        <h3>Finance Advisers NZ</h3>
+        <p>An independent directory of New Zealand financial advisers, searchable by location and service type. Includes adviser profiles, specialties, and contact details to help you find the right match for your situation.</p>
+        <a href="https://financeadvisers.co.nz/" target="_blank" rel="noopener noreferrer" class="dir-link">Find an adviser</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FSPR -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="fspr-callout">
+      <div class="fspr-callout-icon">&#10003;</div>
+      <div class="fspr-callout-body">
+        <h2>Always verify on the FSPR — it's free</h2>
+        <p>All legitimate financial advisers in New Zealand are registered on the Financial Service Providers Register (FSPR), maintained by the Companies Office. Before engaging any adviser, take 30 seconds to search their name and confirm they hold a current Financial Advice Provider (FAP) licence. If they are not on the register, do not proceed — they are operating illegally.</p>
+        <a href="https://fsp-register.companiesoffice.govt.nz/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Check the FSPR Register</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo-pill">
+          <img src="Find%20Financial%20Advice%20Logo%2C%20wide%20R.png" alt="FindFinancialAdvice.co.nz" class="footer-logo-img">
+        </div>
+        <p>Independent financial news for New Zealanders, covering all the topics that matter to your money.</p>
+        <p class="footer-email"><a href="mailto:hello@financialadvice.co.nz">hello@financialadvice.co.nz</a></p>
+      </div>
+      <div class="footer-nav-grid">
+        <div class="footer-nav-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/sources">Sources</a></li>
+            <li><a href="/advisers">Advisers</a></li>
+            <li><a href="/calculators">Calculators</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <h4>Topics</h4>
+          <ul>
+            <li><a href="/kiwisaver">KiwiSaver</a></li>
+            <li><a href="/property">Property</a></li>
+            <li><a href="/investing">Investing</a></li>
+            <li><a href="/budgeting">Budgeting</a></li>
+            <li><a href="/retirement">Retirement</a></li>
+            <li><a href="/insurance">Insurance</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-disclaimer">Find Financial Advice is an independent directory. We do not provide financial advice. Always seek qualified advice before making financial decisions.</p>
+      <p class="footer-copy">&copy; 2026 Find Financial Advice. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  toggle.addEventListener('click', function() {
+    const open = navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  const dropBtn = document.querySelector('.nav-dropdown-toggle');
+  const dropMenu = document.querySelector('.nav-dropdown-menu');
+  if (dropBtn) {
+    dropBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const open = dropMenu.classList.toggle('open');
+      dropBtn.classList.toggle('open', open);
+      dropBtn.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', function() {
+      dropMenu.classList.remove('open');
+      dropBtn.classList.remove('open');
+      dropBtn.setAttribute('aria-expanded', false);
+    });
+  }
+</script>
+  <script src="/main.js"></script>
+</body>
+</html>

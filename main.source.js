@@ -1,0 +1,11 @@
+// Make entire news card clickable (opens article link)
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.news-card').forEach(function (card) {
+    var link = card.querySelector('h3 a');
+    if (!link) return;
+    card.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') return; // let real links work normally
+      window.open(link.href, '_blank', 'noopener,noreferrer');
+    });
+  });
+});

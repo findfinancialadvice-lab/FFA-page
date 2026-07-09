@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Crawl-delay: 5
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+Sitemap: https://financialadvice.co.nz/sitemap.xml
