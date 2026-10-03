@@ -1,0 +1,2 @@
+# /news was removed in June 2026 and used to 301 to the homepage via .htaccess (inert on Cloudflare Pages)
+/news / 301
