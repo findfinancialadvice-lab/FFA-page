@@ -7,7 +7,39 @@
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <title>Page not found | Find Financial Advice NZ</title>
+  <meta name="theme-color"        content="#0d4a35">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="/styles.min.css">
+  <style>
+  .nf-hero { background-color: var(--green); background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10L10 0M-1 1L1 -1M9 11L11 9' stroke='%23ffffff' stroke-width='0.4' fill='none' opacity='0.07'/%3E%3C/svg%3E"); text-align: center; padding: 72px 0 80px; overflow: hidden; }
+  .nf-eyebrow { display: inline-block; color: var(--green-bright); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+  .nf-code { display: flex; justify-content: center; align-items: center; gap: clamp(4px, 1.5vw, 14px); font-family: var(--serif); font-weight: 400; font-size: clamp(5.5rem, 22vw, 11rem); line-height: 1; color: var(--white); margin: 8px 0 20px; }
+  .nf-coin { width: 0.82em; height: 0.82em; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: inherit; color: #7a5a00; background: radial-gradient(circle at 32% 28%, #ffe88a 0%, #f4c542 45%, #d79b12 100%); box-shadow: inset 0 0 0 0.05em #f9dc7a, inset 0 0 0 0.09em #c28a0c, 0 0.08em 0.25em rgba(0,0,0,0.35); animation: nf-bob 3.2s ease-in-out infinite; }
+  .nf-coin span { font-size: 0.5em; transform: translateY(-0.02em); }
+  .nf-hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.7rem, 4.5vw, 2.4rem); color: var(--white); margin: 0 0 14px; line-height: 1.2; }
+  .nf-hero h1 em { color: var(--green-bright); font-style: italic; }
+  .nf-hero p { color: rgba(255,255,255,0.72); max-width: 520px; margin: 0 auto 30px; line-height: 1.65; }
+  .nf-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .nf-btns .btn-primary { background: var(--green-bright); color: var(--green); border: 1.5px solid var(--green-bright); }
+  .nf-btns .btn-primary:hover { background: var(--white); border-color: var(--white); }
+  .nf-btns .btn-ghost-light { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); border: 1.5px solid rgba(255,255,255,0.4); }
+  .nf-btns .btn-ghost-light:hover { background: rgba(255,255,255,0.18); }
+  .nf-lost { padding: 56px 0 72px; }
+  .nf-lost h2 { font-family: var(--serif); font-weight: 400; text-align: center; font-size: 1.6rem; margin: 0 0 6px; }
+  .nf-lost > .container > p { text-align: center; color: var(--mid); margin: 0 0 28px; }
+  .nf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); }
+  .nf-tile { display: block; background: var(--white); padding: 22px 24px; text-decoration: none; color: var(--ink); border-left: 3px solid transparent; transition: background 0.2s, border-color 0.2s; }
+  .nf-tile:hover, .nf-tile:focus-visible { background: var(--green-pale); border-left-color: var(--green-bright); }
+  .nf-tile strong { display: block; font-family: var(--serif); font-weight: 400; font-size: 1.2rem; color: var(--green); margin-bottom: 4px; }
+  .nf-tile span { font-size: 0.88rem; color: var(--mid); line-height: 1.5; }
+  @keyframes nf-bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-0.12em) rotate(4deg); } }
+  @media (prefers-reduced-motion: reduce) { .nf-coin { animation: none; } }
+  @media (max-width: 800px) { .nf-grid { grid-template-columns: 1fr 1fr; } .nf-hero { padding: 48px 0 56px; } }
+  @media (max-width: 520px) { .nf-grid { grid-template-columns: 1fr; } .nf-btns .btn { width: 100%; justify-content: center; } }
+  </style>
 </head>
 <body>
 <nav class="navbar">
@@ -47,13 +79,30 @@
   </div>
 </nav>
 
-<section class="section">
-  <div class="container" style="text-align:center;padding:64px 0;">
-    <h1>Page not found</h1>
-    <p>Sorry, we couldn't find that page. It may have moved, or the address may be mistyped.</p>
-    <div class="hero-btns" style="justify-content:center;margin-top:24px;">
-      <a href="/" class="btn btn-primary">Go to the homepage</a>
-      <a href="/advisers" class="btn btn-outline">Find a financial adviser</a>
+<section class="nf-hero">
+  <div class="container">
+    <span class="nf-eyebrow">Error 404</span>
+    <div class="nf-code" aria-hidden="true">4<span class="nf-coin"><span>$</span></span>4</div>
+    <h1>This page has gone <em>missing</em></h1>
+    <p>Like spare change down the back of the couch, we can't find it. The link may be old, or the address mistyped. The good news: the rest of your money news is right where you left it.</p>
+    <div class="nf-btns">
+      <a href="/" class="btn btn-primary">Back to the homepage</a>
+      <a href="/advisers" class="btn btn-ghost-light">Find a financial adviser</a>
+    </div>
+  </div>
+</section>
+
+<section class="nf-lost">
+  <div class="container">
+    <h2>Or pick up the trail here</h2>
+    <p>Popular topics, updated daily.</p>
+    <div class="nf-grid">
+      <a class="nf-tile" href="/kiwisaver"><strong>KiwiSaver</strong><span>Funds, contributions and the latest news.</span></a>
+      <a class="nf-tile" href="/property"><strong>Property</strong><span>Mortgages, markets and first-home help.</span></a>
+      <a class="nf-tile" href="/investing"><strong>Investing</strong><span>Shares, funds and long-term thinking.</span></a>
+      <a class="nf-tile" href="/budgeting"><strong>Budgeting</strong><span>Everyday money habits that stick.</span></a>
+      <a class="nf-tile" href="/retirement"><strong>Retirement</strong><span>NZ Super and planning ahead.</span></a>
+      <a class="nf-tile" href="/calculators"><strong>Calculators</strong><span>Run the numbers yourself.</span></a>
     </div>
   </div>
 </section>
