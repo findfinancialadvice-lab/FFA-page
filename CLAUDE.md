@@ -7,8 +7,9 @@
 
 **Site name:** Find Financial Advice NZ  
 **Domain:** https://financialadvice.co.nz  
-**Type:** Static HTML website — no framework, no build step, no CMS  
-**Purpose:** Free daily NZ personal finance news aggregator. Scrapes 10 NZ financial sources daily, adds article summaries to topic pages, deploys to SiteGround, and emails subscribers via MailerLite.  
+**Type:** Static HTML site + a couple of Cloudflare Pages Functions — no framework, no build step, no CMS  
+**Hosting:** Cloudflare Pages, deployed from the `main` branch of GitHub repo **`findfinancialadvice-lab/FFA-page`** (auto-deploys on every push to `main`).  
+**Purpose:** Free daily NZ personal finance news aggregator. An external **n8n workflow** ("FFA Daily Scraper + Publisher V3") pulls NZ finance RSS feeds each morning, categorises/summarises with an LLM, commits new article cards to the pages, emails subscribers via **Brevo**, and posts to social via Buffer.  
 **Owner:** Cameron Steele (Solid Steele Advice Ltd, Christchurch NZ)
 
 ---
@@ -39,25 +40,43 @@
 ├── og-image.jpg                # 1200×630 OG image (hosted externally at postimages.org — see below)
 ├── favicon.ico / favicon.svg / favicon-96x96.png / apple-touch-icon.png
 ├── Find Financial Advice Logo, wide R.png   # Nav logo
+├── functions/
+│   └── api/
+│       └── subscribe.js        # Cloudflare Pages Function — POST /api/subscribe → Brevo (see below)
 ├── serve_ffa.py                # Local dev server (python3 serve_ffa.py)
 ├── update_returns_data.py      # Updates KiwiSaver fund returns data
 └── .claude/
-    └── settings.local.json     # Permissions for the daily scheduled task
+    └── settings.local.json     # Local permissions
 ```
 
-**Deploy script** (one level up):
-```
-/Users/cam/Documents/saved stuff/SSA/deploy-ffa.command
-```
-Run with: `cd "/Users/cam/Documents/saved stuff/SSA" && python3 deploy-ffa.command`  
-Uploads all HTML, CSS, JS, images, xml, txt, webmanifest, and .htaccess via FTP_TLS to SiteGround.  
-**Always run this after making any changes.**
+> **Note:** The site of record is the GitHub repo `findfinancialadvice-lab/FFA-page`. The n8n workflow commits directly to that repo's `main`, and Cloudflare Pages deploys from it. Changes reach production only by merging to `main` (use a branch and pull request for manual edits). A separate private copy, `mrcam1/ffa-website`, exists as a backup of the Mac working folder and is **not** connected to Cloudflare, so merging there changes nothing live.
 
-**Daily scrape task:**
-```
-/Users/cam/.claude/scheduled-tasks/ffa-daily-news-scrape/SKILL.md
-```
-Runs at 6am daily. Scrapes 10 sources, prepends new articles to category pages and index.html, deploys, sends MailerLite email.
+## Deployment
+- **Cloudflare Pages**, connected to GitHub repo `findfinancialadvice-lab/FFA-page`.
+- **Auto-deploys on every push/commit to `main`.** No manual deploy step, no FTP.
+- **Environment variables** (Cloudflare Pages → Settings → Environment variables): `BREVO_API_KEY` — the Brevo API key used by `functions/api/subscribe.js`. Never hard-code it.
+
+## Newsletter signup (Brevo)
+- Homepage `#subscribe-form` POSTs `{email}` to **`/api/subscribe`** (a Pages Function).
+- `functions/api/subscribe.js` validates the email and calls `POST https://api.brevo.com/v3/contacts` with `{ email, listIds: [2], updateEnabled: true }` (single opt-in, list ID **2**). Duplicate contacts are treated as success.
+- The Brevo key is read only from `env.BREVO_API_KEY` — never in client code.
+- **MailerLite has been fully removed** (form embed, scripts, and the old email path). Do not re-add it.
+
+## Email flow (verified 9 Oct 2026 from a raw test email)
+Everything sent as `@financialadvice.co.nz` goes out through **Brevo**; Cloudflare handles inbound mail only.
+- **Daily digest:** Brevo campaign to list **2**, triggered by the n8n workflow (see below).
+- **Mail typed in Gmail as `hello@financialadvice.co.nz`:** Gmail's "Send mail as" uses **Brevo's SMTP relay**, not Gmail's own servers. Headers show `Return-Path` on `sender-sib.com`, `DKIM pass` for `financialadvice.co.nz` (selector `brevo2`), `SPF pass`, `DMARC pass`. Consequences: Brevo adds an open-tracking pixel and `List-Unsubscribe` headers to these one-to-one emails unless tracking is turned off in Brevo (Transactional email, Settings, Tracking), and they count toward the same Brevo daily sending limit as the digest.
+- **`info@` auto-reply:** a Cloudflare Email Worker (`ffa-info-autoreply`) replies from `hello@` through the Brevo transactional API. Its source is in `email-worker/` in the Mac working folder only, not in this repo.
+- **Inbound:** MX records point at Cloudflare Email Routing, which forwards to the Gmail mailbox. It cannot send.
+- **DNS (Cloudflare):** Brevo DKIM CNAMEs (`brevo1._domainkey`, `brevo2._domainkey`), a `brevo-code` TXT, SPF including `spf.brevo.com`, and DMARC `p=none` (monitoring only).
+- `/cdn-cgi/l/email-protection` is Cloudflare Email Address Obfuscation rewriting the footer address. Search Console reports it as a 404. It is harmless and can be ignored.
+
+## Daily news (n8n)
+- Handled by the external **n8n workflow "FFA Daily Scraper + Publisher V3"** (not a local Claude task — the old `~/.claude/scheduled-tasks/ffa-daily-news-scrape/SKILL.md` is retired).
+- Cron `0 7 * * *` in `Pacific/Auckland` (7am NZT).
+- Fetches the current pages from GitHub, dedupes new articles against existing URLs, categorises + summarises via OpenRouter (`claude-haiku-4.5`), then **splices article cards into the news grid** and commits to `main` via the GitHub Contents API.
+- It edits the **live** files (does not use a page template), so anything outside the `.news-grid` — e.g. the newsletter form — is preserved untouched.
+- Also sends the daily email via a **Brevo** campaign to list **2**, and posts to LinkedIn/Facebook via **Buffer**.
 
 ---
 
@@ -74,12 +93,13 @@ Runs at 6am daily. Scrapes 10 sources, prepends new articles to category pages a
 | insurance.html | /insurance | Insurance articles |
 | advisers.html | /advisers | Static — adviser directory links + FSPR callout |
 | calculators.html | /calculators | Static — curated calculator links |
-| sources.html | /sources | Static — describes the 10 news sources |
+| sources.html | /sources | Static — describes the news sources |
+| subscribe.html | /subscribe | Static — standalone Brevo signup landing page (posts to `/api/subscribe`); linked in header nav + footer on every page |
 
-**News grid behaviour:**  
-- Category pages: daily scrape **prepends** new articles (accumulate over time)  
-- index.html: daily scrape **prepends** new articles, then **caps the grid at 60 cards** (oldest trimmed; full archive lives on topic pages)  
-- Article card format: `<div class="news-card" data-category="[category]">` with tag, h3/link, summary, meta (source + date)
+**News grid behaviour** (performed by the n8n workflow's "HTML Surgery" node):  
+- Category pages: **prepends** new articles into `<div class="news-grid">` (accumulate over time, no cap)  
+- index.html: **prepends** new articles into `<div class="news-grid" id="news-grid">`, then **caps the grid at 60 cards** (oldest trimmed; full archive lives on topic pages)  
+- Article card format: `<div class="news-card" data-category="[category]">` with tag, h3/link, summary, meta (source + date). The workflow keys off these exact markers — don't rename the grid `id`/class or the card structure.
 
 ---
 
@@ -120,7 +140,7 @@ Runs at 6am daily. Scrapes 10 sources, prepends new articles to category pages a
 ### Navbar
 - White background with 3px `--green-bright` top border
 - Underline hover animation (`::after` pseudo-element, scales from 0 to 1)
-- Social icons (Facebook, LinkedIn, Instagram) after nav links, separated by thin divider
+- Social icons (Facebook, LinkedIn) after nav links, separated by thin divider (Instagram removed — do not re-add)
 - Mobile: hamburger toggle
 
 ### Cards
@@ -155,7 +175,7 @@ Runs at 6am daily. Scrapes 10 sources, prepends new articles to category pages a
 ### OG Image
 - **File:** og-image.jpg (1200×630, baseline JPEG)
 - **Hosted externally:** `https://i.postimg.cc/XvXzCPs9/FFA-og-image.jpg`  
-  (SiteGround blocks Facebook's crawler at server level — externally hosted bypasses this)
+  (Originally externalised because SiteGround blocked Facebook's crawler. Now on Cloudflare Pages that constraint is gone — the OG image could be served from the site directly, but it's left external to avoid re-scraping/cache churn. Not urgent.)
 - Design: deep green background, "FinancialAdvice.co.nz" white + green accent, subheadline, category footer strip
 
 ### Schema (JSON-LD)
@@ -188,26 +208,25 @@ Every page has a single `@graph` block containing:
 
 ---
 
-## News Scrape Sources (Daily Task)
-1. Interest.co.nz — https://www.interest.co.nz/news
-2. Good Returns — https://www.goodreturns.co.nz
-3. Sorted NZ — https://sorted.org.nz/blog
-4. Stuff.co.nz — RSS feed (JS-rendered page, use RSS instead)
-5. NZ Herald — https://www.nzherald.co.nz/business/personal-finance
-6. RNZ Business — https://www.rnz.co.nz/news/business
-7. 1News — https://www.1news.co.nz/tags/business/
-8. Irvine Wenborn — https://www.irvinewenborn.co.nz/financialeducation
-9. Opes Partners — https://www.opespartners.co.nz/mortgage
-10. Solid Steele Advice — https://www.solidsteeleadvice.co.nz/learn-and-blog
+## News Sources (n8n RSS feeds)
+The workflow's "Set RSS Feed URLs" node currently pulls these 7 RSS feeds:
+1. Interest.co.nz — `https://www.interest.co.nz/rss`
+2. Good Returns (KiwiSaver) — `https://www.goodreturns.co.nz/rss/kiwisaver.xml`
+3. Good Returns (News) — `https://www.goodreturns.co.nz/rss/news.xml`
+4. Stuff.co.nz — `https://www.stuff.co.nz/rss`
+5. RNZ Business — `https://www.rnz.co.nz/rss/business.xml`
+6. NZ Herald Business — `https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/business/?outputType=xml`
+7. Solid Steele Advice — `https://www.solidsteeleadvice.co.nz/feed.xml`
 
-**Categories:** kiwisaver, property, investing, budgeting, retirement, insurance  
-**Article card format:** see SKILL.md for exact HTML template
+- Articles within a ~48h window are considered; **Solid Steele articles are always included regardless of age**.
+- **Categories:** kiwisaver, property, investing, budgeting, retirement, insurance (LLM assigns exactly one).
+- To change sources, edit the feed array in the n8n workflow — not this repo.
 
 ---
 
 ## Minification
 HTML pages link to `styles.min.css` and `main.min.js` (Semrush flagged unminified assets).
-**After editing styles.css or main.js, always regenerate the minified copies before deploying:**
+**After editing styles.css or main.js, always regenerate the minified copies before committing to `main`** (the pages load the `.min` files, so unminified edits won't show up live):
 ```bash
 cd "/Users/cam/Documents/saved stuff/SSA/FFA" && python3 -c "
 import rcssmin, rjsmin
@@ -217,7 +236,7 @@ open('main.min.js','w').write(rjsmin.jsmin(open('main.js').read()))"
 
 ## Owner's Preferences
 - **Terse responses** — no trailing summaries or recaps
-- **Auto-deploy** — always run `deploy-ffa.command` at the end of any change
+- **Deploy = push to `main`** — changes go live via Cloudflare when committed to `main` (no `deploy-ffa.command`, no FTP). This local folder has no git remote; changes currently reach `main` via GitHub web upload.
 - **Broad permissions** preferred over per-command prompts
 - **No diagonal microlines** on intro/header sections (removed, keep them off)
 - **Solid Steele Advice** is Cameron's own KiwiSaver advisory business — feature it prominently where relevant (advisers page, FAQ schema, calculators)
@@ -227,18 +246,9 @@ open('main.min.js','w').write(rjsmin.jsmin(open('main.js').read()))"
 ---
 
 ## Known Issues / Notes
-- SiteGround's server-level bot protection blocks third-party scanners (RankPrompt, etc.) with HTTP 202. This does **not** affect Google/Bing — ignore audit tool errors about robots.txt/sitemap being "missing"
-- Facebook's crawler (facebookexternalhit) is also blocked by SiteGround — that's why OG image is hosted on postimages.org
-- The daily scrape SKILL.md has been updated to **prepend** (not replace) articles on index.html — do not change this back to replace behaviour
-- `kiwisaver-fund-comparison.html` is a standalone page not in the main nav or sitemap
-- `netlify-deploy/` folder exists but site is deployed to SiteGround via FTP, not Netlify
-
----
-
-## FTP / Deploy Credentials
-Credentials stored in `~/.netrc` (not in any project file).  
-- Host: `ftp.financialadvice.co.nz`  
-- User: `host@financialadvice.co.nz`  
-- Remote path: `financialadvice.co.nz/public_html`
-
+- **Now on Cloudflare Pages** (migrated off SiteGround). Old SiteGround-specific notes (HTTP 202 bot protection, `facebookexternalhit` blocking, FTP) no longer apply.
+- **`.htaccess` is Apache-only** and is inert on Cloudflare Pages. The redirects it used to do (HTTPS enforce, www→non-www, `/index.html`→`/`, clean `.html` URLs) must be reproduced with a Cloudflare `_redirects` file or Cloudflare rules — verify these are in place; don't assume `.htaccess` is doing anything.
+- The n8n workflow **prepends** (never replaces) articles and preserves everything outside `.news-grid` — do not change the grid markers it keys off.
+- `kiwisaver-fund-comparison.html` is a standalone page not in the main nav or sitemap.
+- A `netlify-deploy/` folder may still exist locally — ignore it; the site is on Cloudflare Pages, not Netlify.
 - news.html was REMOVED (June 2026) — /news 301-redirects to homepage. Do not recreate it.
