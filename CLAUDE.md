@@ -209,15 +209,22 @@ Every page has a single `@graph` block containing:
 ---
 
 ## News Sources (n8n RSS feeds)
-The workflow's "Set RSS Feed URLs" node currently pulls these 7 RSS feeds:
+The workflow's "Set RSS Feed URLs" node currently pulls these 11 RSS feeds (updated 16 Oct 2026):
 1. Interest.co.nz — `https://www.interest.co.nz/rss`
 2. Good Returns (KiwiSaver) — `https://www.goodreturns.co.nz/rss/kiwisaver.xml`
 3. Good Returns (News) — `https://www.goodreturns.co.nz/rss/news.xml`
-4. Stuff.co.nz — `https://www.stuff.co.nz/rss`
-5. RNZ Business — `https://www.rnz.co.nz/rss/business.xml`
-6. NZ Herald Business — `https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/business/?outputType=xml`
+4. Stuff — `https://www.stuff.co.nz/rss` (kept only for `/money/` links)
+5. RNZ Personal Finance — `https://www.rnz.co.nz/rss/personal-finance.xml`
+6. NZ Herald Personal Finance — `https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/business/personal-finance/?outputType=xml`
 7. Solid Steele Advice — `https://www.solidsteeleadvice.co.nz/feed.xml`
+8. Investment News NZ — `https://investmentnews.co.nz/feed/` (sponsor posts skipped)
+9. Reserve Bank of NZ — `https://www.rbnz.govt.nz/feeds/news`
+10. Irvine Wenborn — `https://www.irvinewenborn.co.nz/blog-feed.xml` (posts roughly monthly)
+11. 1News — `https://www.1news.co.nz/arc/outboundfeeds/rss/` (all-topics feed; "Extract Candidates" keeps only items whose title/summary matches the `MONEY_WORDS` keyword list)
 
+- Per-source rules (`SOURCES`) and the 1News keyword list live in the "Extract Candidates" Code node.
+- The LLM prompt excludes company press releases but allows official RBNZ announcements that affect household money, and excludes general news (politics, crime, sport, weather).
+- Listed on `/sources` but **not fed** (no RSS feed exists): Sorted, Opes Partners, Consumer NZ, The Spinoff.
 - Articles within a ~48h window are considered; **Solid Steele articles are always included regardless of age**.
 - **Categories:** kiwisaver, property, investing, budgeting, retirement, insurance (LLM assigns exactly one).
 - To change sources, edit the feed array in the n8n workflow — not this repo.
